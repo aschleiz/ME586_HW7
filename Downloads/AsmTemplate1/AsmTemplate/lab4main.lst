@@ -71,47 +71,50 @@ ARM Macro Assembler    Page 2
 
    46 00000014 F7FF FFFE       bl               inittime    ; Set up timer
    47 00000018         ;mov R1, #0
-   48 00000018 E015            b                done        ;test code
-   49 0000001A         ;D4 --------------------------------
-   50 0000001A F7FF FFFE       bl               initcom
-   51 0000001E         
-   52 0000001E         
-   53 0000001E         ;------------------ this loops forever unless beq holds 
+   48 00000018         ;b done ;test code
+   49 00000018         ;D4 --------------------------------
+   50 00000018 F7FF FFFE       bl               initcom
+   51 0000001C         
+   52 0000001C         
+   53 0000001C         ;------------------ this loops forever unless beq holds 
                        -----
-   54 0000001E         ;
-   55 0000001E         ; Desired behavior: output when outlicks is nonzero, the
+   54 0000001C         ;
+   55 0000001C         ; Desired behavior: output when outlicks is nonzero, the
                        n set outclicks to zero
-   56 0000001E         ; Desired behavior: when outclicks zero, checkcom and de
+   56 0000001C         ; Desired behavior: when outclicks zero, checkcom and de
                        cide what to do next
-   57 0000001E         ; Log:
-   58 0000001E         
-   59 0000001E         
-   60 0000001E BF00    loop    nop
-   61 00000020         ;XXX D5-1 -------------------------------------------
-   62 00000020 4B18            ldr              R3, =outclicks ;The following d
+   57 0000001C         ; Log:
+   58 0000001C         
+   59 0000001C         
+   60 0000001C BF00    loop    nop
+   61 0000001E         ;XXX D5-1 -------------------------------------------
+   62 0000001E 4B19            ldr              R3, =outclicks ;The following d
                                                             idn't work because 
                                                             we load an address:
                                                              ldrh R3, =outclick
                                                             s
-   63 00000022 8818            ldrh             R0, [R3]
-   64 00000024 2800            cmp              R0, #0
-   65 00000026 D108            bne              output      ;branch away when t
+   63 00000020 8818            ldrh             R0, [R3]
+   64 00000022 2800            cmp              R0, #0
+   65 00000024 D109            bne              output      ;branch away when t
                                                             wo values are not e
                                                             qual
-   66 00000028         ;------------------------------------------------
-   67 00000028         ;[DEBUG] Checkcom: 
-   68 00000028 F7FF FFFE       bl               checkcom
-   69 0000002C 2800            cmp              R0, #0x00
-   70 0000002E D1FF            bne              input       ;branch away when c
+   66 00000026         ;------------------------------------------------
+   67 00000026         ;[DEBUG] Checkcom: 
+   68 00000026 F7FF FFFE       bl               checkcom    ;returns FF if ther
+                                                            e's something in re
+                                                            gister  
+   69 0000002A 2800            cmp              R0, #0x00
+   70 0000002C D100            bne              input       ;branch away when c
                                                             heckcom has nonzero
                                                             .
-   71 00000030         
+   71 0000002E E7F5            b                loop        ;if no data then ke
+                                                            ep looping
    72 00000030 F7FF FFFE 
                        input   bl               getchar
    73 00000034         
    74 00000034 281B            cmp              R0, #esc_char
    75 00000036 D006            beq              done
-   76 00000038 E7F1            b                loop
+   76 00000038 E7F0            b                loop
    77 0000003A         ;XXX D5-2 ----------------------------------------------
                        ------------   
    78 0000003A F7FF FFFE 
@@ -122,18 +125,18 @@ ARM Macro Assembler    Page 2
    81 0000003E F04F 0000       ldr              R0,=0x0     ;zero out outclicks
                                                             
    82 00000042 8018            strh             R0, [R3]
-   83 00000044 E7EB            b                loop
+   83 00000044 E7EA            b                loop
    84 00000046         ;-------------------------------------------------------
                        --------
-   85 00000046 E7FE    done    b                done
-   86 00000048         
-   87 00000048                 ENDP
 
 
 
 ARM Macro Assembler    Page 3 
 
 
+   85 00000046 E7FE    done    b                done
+   86 00000048         
+   87 00000048                 ENDP
    88 00000048         ;;
    89 00000048         ;; Desired behavior: increment the clicks whenever the w
                        aveform is changing sine
@@ -165,40 +168,47 @@ ARM Macro Assembler    Page 3
                                                             crovision docs to f
                                                             ind where the whole
                                                              table is located
-  112 00000062                 EXPORT           SysTick_Handler
-  113 00000062 B500            push             {lr}
-  114 00000064 E92D 07FF       push             {r0-r10}
-  115 00000068         ;r3 is the setter variable, others are used for storing 
+  112 00000062                 EXPORT           SysTick_Handler ;need this beca
+                                                            use otherwise the c
+                                                            ode will get stuck 
+                                                            and call the wrong 
+                                                            version of the hand
+                                                            ler (the weak one)
+  113 00000062         ;this implies that we leave main once an exception is ca
+                       lled
+  114 00000062 B500            push             {lr}
+  115 00000064 E92D 07FF       push             {r0-r10}
+  116 00000068         ;r3 is the setter variable, others are used for storing 
                        addresses
-  116 00000068 4805            ldr              r0, =clicks
-  117 0000006A 4906            ldr              r1, =outclicks
-  118 0000006C 8803            ldrh             r3, [r0]    ; 2 byte load is ne
+  117 00000068 4805            ldr              r0, =clicks
+  118 0000006A 4906            ldr              r1, =outclicks
+  119 0000006C 8803            ldrh             r3, [r0]    ; 2 byte load is ne
                                                             eded, now r3 has th
                                                             e value of clicks  
                                                                            
-  119 0000006E 800B            strh             r3, [r1]    ; copy clicks to ou
+  120 0000006E 800B            strh             r3, [r1]    ; copy clicks to ou
                                                             tlicks, but make su
                                                             re to send only 16 
                                                             bits since it is 
-  120 00000070 F04F 0300       ldr              r3, =0x0    ; clear the setter 
+  121 00000070 F04F 0300       ldr              r3, =0x0    ; clear the setter 
                                                             variable
-  121 00000074 6003            str              r3, [r0]    ; reset clicks to z
-                                                            ero
-  122 00000076         
-  123 00000076         
-  124 00000076         
-  125 00000076 E8BD 07FF       pop              {r0-r10}
-  126 0000007A F85D EB04       pop              {lr}
-  127 0000007E 4770            bx               lr
-  128 00000080                 ENDP
-  129 00000080                 END
-              00000000 
+  122 00000074 8003            strh             r3, [r0]    ; reset clicks to z
 
 
 
 ARM Macro Assembler    Page 4 
 
 
+                                                            ero
+  123 00000076         
+  124 00000076         
+  125 00000076         
+  126 00000076 E8BD 07FF       pop              {r0-r10}
+  127 0000007A F85D EB04       pop              {lr}
+  128 0000007E 4770            bx               lr
+  129 00000080                 ENDP
+  130 00000080                 END
+              00000000 
               00000000 
               40010414 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --depend=.\la
@@ -244,7 +254,7 @@ Symbol: clicks
    Uses
       At line 32 in file lab4main.s
       At line 95 in file lab4main.s
-      At line 116 in file lab4main.s
+      At line 117 in file lab4main.s
 
 outclicks 00000002
 
@@ -254,7 +264,7 @@ Symbol: outclicks
    Uses
       At line 36 in file lab4main.s
       At line 62 in file lab4main.s
-      At line 117 in file lab4main.s
+      At line 118 in file lab4main.s
 
 3 symbols
 
@@ -301,7 +311,6 @@ Symbol: done
    Definitions
       At line 85 in file lab4main.s
    Uses
-      At line 48 in file lab4main.s
       At line 75 in file lab4main.s
       At line 85 in file lab4main.s
 
@@ -313,12 +322,13 @@ Symbol: input
    Uses
       At line 70 in file lab4main.s
 Comment: input used once
-loop 0000001E
+loop 0000001C
 
 Symbol: loop
    Definitions
       At line 60 in file lab4main.s
    Uses
+      At line 71 in file lab4main.s
       At line 76 in file lab4main.s
       At line 83 in file lab4main.s
 

@@ -65,10 +65,10 @@ loop              nop
 			bne output           ;branch away when two values are not equal
   ;------------------------------------------------
   ;[DEBUG] Checkcom:	
-			bl checkcom    
+			bl checkcom  ;returns FF if there's something in register  
 			cmp R0, #0x00
 			bne input      ;branch away when checkcom has nonzero.
-			
+			b loop ;if no data then keep looping
 input       bl getchar
             
 			cmp R0, #esc_char
@@ -119,7 +119,7 @@ SysTick_Handler PROC ;Future question to address: search microvision docs to fin
                  ldrh r3, [r0]      ; 2 byte load is needed, now r3 has the value of clicks                 
                  strh r3, [r1]      ; copy clicks to outlicks, but make sure to send only 16 bits since it is 
                  ldr  r3, =0x0      ; clear the setter variable
-                 str  r3, [r0]      ; reset clicks to zero
+                 strh  r3, [r0]      ; reset clicks to zero
                  
 
 
