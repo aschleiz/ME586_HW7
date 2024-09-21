@@ -25,9 +25,9 @@ serialIO    		PROC
 			push {LR}
 			bl initcom
 			nop
-			mov R0, 0x16
+			mov R0, #0x16
 			bl checkcom
-			mov R1, 0x16
+			mov R1, #0x16
 			bl getchar
 			bl testChComp
 			pop {LR}
@@ -77,7 +77,7 @@ initcom 		PROC
             ; AND R1, [R0]           ; Why can't you do this? Because [R0] needs to be loaded to memory
             LDR R2,[R0]
             AND R1, R2 ;Now we have cleared the bits we want to and saved that to R1
-			ORR R1, 0x04B0 ;0d4,0d11,0 <=> 0x04B0 ;since we are orr'ing the things that we don't change must
+			ORR R1, #0x04B0 ;0d4,0d11,0 <=> 0x04B0 ;since we are orr'ing the things that we don't change must
 			                       ;be set as zero. Want 10 as input and 9 as AFOutput max speed. 
 			STR R1, [R0]   ;so we have set the 
             
@@ -130,10 +130,10 @@ READSTATUS  LDRB R3, [R1] ;returned zero
 			
 			
 			;;output to R0 if data is present FF, else 0
-NODATA      MOV R0, #0x0
+NODATA            MOV R0, #0x0
 
 
-EXIT		pop {R1-R9}
+EXIT		      pop {R1-R9}
 			pop {lr}
 			bx lr
 			ENDP

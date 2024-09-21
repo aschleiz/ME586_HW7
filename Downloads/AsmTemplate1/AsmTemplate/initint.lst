@@ -1,0 +1,271 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;Equates
+    2 00000000 0000005C 
+                       IRQADDR EQU              0x0000005C
+    3 00000000 40021018 
+                       RCC_APB2ENR
+                               EQU              0x40021018
+    4 00000000 40010800 
+                       GPIOA_CRL
+                               EQU              0x40010800
+    5 00000000 40010400 
+                       EXTI_IMR
+                               EQU              0x40010400
+    6 00000000 4001040C 
+                       EXTI_FTSR
+                               EQU              0x4001040C
+    7 00000000 40010414 
+                       EXTI_PR EQU              0x40010414
+    8 00000000 E000E100 
+                       NVIC_ISER0
+                               EQU              0xE000E100
+    9 00000000         
+   10 00000000                 AREA             MyConst, DATA, READONLY ; alloc
+                                                            ates memory for ini
+                                                            tialized data
+   11 00000000         
+   12 00000000         ;const_label Your DCB, , DCW, DCD, etc. statements go he
+                       re.
+   13 00000000         
+   14 00000000                 AREA             MyData, DATA, READWRITE ; alloc
+                                                            ates memory for uni
+                                                            nitialized data
+   15 00000000         
+   16 00000000         ;data_label Your SPACE, etc. statements go here.
+   17 00000000         
+   18 00000000                 AREA             ARMex, CODE, READONLY
+   19 00000000                 ENTRY
+   20 00000000         initint PROC                         ; Routine that enab
+                                                            les the IRQ interru
+                                                            pt pin, based off l
+                                                            ecture 11 slides/no
+                                                            tes
+   21 00000000                 EXPORT           initint
+   22 00000000 B500            push{LR}
+   23 00000002         
+   24 00000002 480D            ldr              R0, =RCC_APB2ENR ; Load the add
+                                                            ress of the APB2 En
+                                                            able Register
+   25 00000004 6801            ldr              R1, [R0]    ; Load the contents
+                                                             of the APB2 Enable
+                                                             Register to R1
+   26 00000006 F041 0104       ORR              R1, #0x4    ; Enable the second
+                                                             bit (IOPA EN) of A
+                                                            PB2 ENR
+   27 0000000A 6001            str              R1, [R0]    ; Write the value i
+                                                            n R1 back to the AP
+                                                            B2 ENR address
+   28 0000000C         
+   29 0000000C 480B            ldr              R0, =GPIOA_CRL ; Load the addre
+                                                            ss of the GPIOA con
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            fig register
+   30 0000000E 6801            ldr              R1, [R0]    ; Load the contents
+                                                             of the config regi
+                                                            ster to R1
+   31 00000010 F041 0140       ORR              R1, #0x40   ; Set GPIOA pin 1 t
+                                                            o floating input
+   32 00000014 6001            str              R1, [R0]    ; Store the registe
+                                                            r value back to the
+                                                             memory address
+   33 00000016         
+   34 00000016 480A            ldr              R0, =EXTI_IMR ; Load the addres
+                                                            s of the interrupt 
+                                                            mask register to R0
+                                                            
+   35 00000018 F04F 0102       mov              R1, #0x2    ; Enable the 2s bit
+                                                             of the interrupt m
+                                                            ask register
+   36 0000001C 6001            str              R1, [R0]    ; Store the desired
+                                                             value back to the 
+                                                            memory address
+   37 0000001E         
+   38 0000001E 4809            ldr              R0, =EXTI_FTSR ; Load the addre
+                                                            ss of the falling t
+                                                            rigger selection re
+                                                            gister
+   39 00000020 F04F 0102       mov              R1, #0x2    ; Enable the 2s bit
+                                                             of the ftsr
+   40 00000024 6001            str              R1, [R0]    ; Write the desired
+                                                             value back to the 
+                                                            EXTI_FTSR address
+   41 00000026         
+   42 00000026         ; Wanted to include this section as it was in the lectur
+                       e notes, but is not needed
+   43 00000026         ; in this subroutine
+   44 00000026         ;            ldr R0, =EXTI_PR        ; Load the value of
+                        the pending register to R0
+   45 00000026         ;            mov R1, #0x2            ; Set the 2s bit of
+                        the register to 1 to clear interrupt
+   46 00000026         ;            str R1, [R0]            ; Write the desired
+                        value to the EXTI_PR address
+   47 00000026         
+   48 00000026 4808            ldr              R0, =NVIC_ISER0 ; Load the valu
+                                                            e of the NVIC Set-E
+                                                            nable register to R
+                                                            0
+   49 00000028 F04F 0180       mov              R1, #0x80   ; Set the value of 
+                                                            the 7th bit to 1 to
+                                                             enable
+   50 0000002C 6001            str              R1, [R0]    ; Store the desired
+                                                             value to the NVIC_
+                                                            ISER0 address
+   51 0000002E         
+   52 0000002E F85D EB04       pop              {LR}
+   53 00000032 4770            bx               LR
+   54 00000034 E7FE    done    b                done
+   55 00000036         
+   56 00000036                 ENDP
+   57 00000036                 END
+              00 00 40021018 
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+              40010800 
+              40010400 
+              4001040C 
+              E000E100 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --depend=.\in
+itint.d -o.\initint.o -I.\RTE\_AsmTemplate -IC:\Users\etben\AppData\Local\Arm\P
+acks\ARM\CMSIS\5.5.1\CMSIS\Core\Include -IC:\Users\etben\AppData\Local\Arm\Pack
+s\Keil\STM32F1xx_DFP\2.4.1\Device\Include --predefine="__EVAL SETA 1" --predefi
+ne="__UVISION_VERSION SETA 528" --predefine="_RTE_ SETA 1" --predefine="STM32F1
+0X_MD SETA 1" --list=.\initint.lst initint.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+MyConst 00000000
+
+Symbol: MyConst
+   Definitions
+      At line 10 in file initint.s
+   Uses
+      None
+Comment: MyConst unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+MyData 00000000
+
+Symbol: MyData
+   Definitions
+      At line 14 in file initint.s
+   Uses
+      None
+Comment: MyData unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ARMex 00000000
+
+Symbol: ARMex
+   Definitions
+      At line 18 in file initint.s
+   Uses
+      None
+Comment: ARMex unused
+done 00000034
+
+Symbol: done
+   Definitions
+      At line 54 in file initint.s
+   Uses
+      At line 54 in file initint.s
+Comment: done used once
+initint 00000000
+
+Symbol: initint
+   Definitions
+      At line 20 in file initint.s
+   Uses
+      At line 21 in file initint.s
+Comment: initint used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+EXTI_FTSR 4001040C
+
+Symbol: EXTI_FTSR
+   Definitions
+      At line 6 in file initint.s
+   Uses
+      At line 38 in file initint.s
+Comment: EXTI_FTSR used once
+EXTI_IMR 40010400
+
+Symbol: EXTI_IMR
+   Definitions
+      At line 5 in file initint.s
+   Uses
+      At line 34 in file initint.s
+Comment: EXTI_IMR used once
+EXTI_PR 40010414
+
+Symbol: EXTI_PR
+   Definitions
+      At line 7 in file initint.s
+   Uses
+      None
+Comment: EXTI_PR unused
+GPIOA_CRL 40010800
+
+Symbol: GPIOA_CRL
+   Definitions
+      At line 4 in file initint.s
+   Uses
+      At line 29 in file initint.s
+Comment: GPIOA_CRL used once
+IRQADDR 0000005C
+
+Symbol: IRQADDR
+   Definitions
+      At line 2 in file initint.s
+   Uses
+      None
+Comment: IRQADDR unused
+NVIC_ISER0 E000E100
+
+Symbol: NVIC_ISER0
+   Definitions
+      At line 8 in file initint.s
+   Uses
+      At line 48 in file initint.s
+Comment: NVIC_ISER0 used once
+RCC_APB2ENR 40021018
+
+Symbol: RCC_APB2ENR
+   Definitions
+      At line 3 in file initint.s
+   Uses
+      At line 24 in file initint.s
+Comment: RCC_APB2ENR used once
+7 symbols
+348 symbols in table

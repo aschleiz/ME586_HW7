@@ -1,0 +1,429 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;Equates
+    2 00000000 40010414 
+                       EXTI_PR EQU              0x40010414
+    3 00000000 00000002 
+                       EXTI1_PReset
+                               EQU              0x02
+    4 00000000 0000001B 
+                       esc_char
+                               EQU              0x1B
+    5 00000000         
+    6 00000000                 AREA             MyConst, DATA, READONLY ; alloc
+                                                            ates memory for ini
+                                                            tialized data
+    7 00000000         
+    8 00000000         ;const_label Your DCB, , DCW, DCD, etc. statements go he
+                       re.
+    9 00000000         
+   10 00000000                 AREA             MyData, DATA, READWRITE ; alloc
+                                                            ates memory for uni
+                                                            nitialized data
+   11 00000000         
+   12 00000000 00 00   clicks  SPACE            2           ; Initializes 16 bi
+                                                            t (2 byte) space fo
+                                                            r clicks
+   13 00000002 00 00   outclicks
+                               SPACE            2
+   14 00000004         
+   15 00000004                 AREA             ARMex, CODE, READONLY
+   16 00000000                 ENTRY
+   17 00000000         __main  PROC
+   18 00000000                 EXPORT           __main
+   19 00000000                 IMPORT           initint
+   20 00000000                 IMPORT           serialIO
+   21 00000000                 IMPORT           initcom
+   22 00000000                 IMPORT           checkcom
+   23 00000000                 IMPORT           getchar
+   24 00000000                 IMPORT           shownum
+   25 00000000                 IMPORT           inittime
+   26 00000000         ; Test code
+   27 00000000         ;mov r0, #0
+   28 00000000         
+   29 00000000         ;D1 -------------------------------
+   30 00000000         ; Initialize clicks (halfword) to zero
+   31 00000000 481E            ldr              R0, =clicks
+   32 00000002 F04F 0100       mov              R1, #0x0000
+   33 00000006 8001            STRH             R1, [R0]
+   34 00000008         ; Initialize outclicks (halfword) to zero
+   35 00000008 481D            ldr              R0, =outclicks
+   36 0000000A F04F 0100       mov              R1, #0x0000
+   37 0000000E 8001            strh             R1, [R0]
+   38 00000010         ;-----------------------------------
+   39 00000010         
+   40 00000010         
+   41 00000010         ;D2 --------------------------------
+   42 00000010 F7FF FFFE       bl               initint     ; Set up EXT1_IRQ p
+                                                            ort
+   43 00000014         
+   44 00000014         ;D3 --------------------------------
+   45 00000014 F7FF FFFE       bl               inittime    ; Set up timer
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   46 00000018         ;mov R1, #0
+   47 00000018         
+   48 00000018         ;D4 --------------------------------
+   49 00000018 F7FF FFFE       bl               initcom
+   50 0000001C         
+   51 0000001C         
+   52 0000001C         ;------------------ this loops forever unless beq holds 
+                       -----
+   53 0000001C         ;
+   54 0000001C         ; Desired behavior: output when outlicks is nonzero, the
+                       n set outclicks to zero
+   55 0000001C         ; Desired behavior: when outclicks zero, checkcom and de
+                       cide what to do next
+   56 0000001C         ; Log:
+   57 0000001C         
+   58 0000001C         
+   59 0000001C BF00    loop    nop
+   60 0000001E         ;XXX D5-1 -------------------------------------------
+   61 0000001E 4B18            ldr              R3, =outclicks ;The following d
+                                                            idn't work because 
+                                                            we load an address:
+                                                             ldrh R3, =outclick
+                                                            s
+   62 00000020 8818            ldrh             R0, [R3]
+   63 00000022 2800            cmp              R0, #0
+   64 00000024 D108            bne              output      ;branch away when t
+                                                            wo values are not e
+                                                            qual
+   65 00000026         ;------------------------------------------------
+   66 00000026         ;[DEBUG] Checkcom: 
+   67 00000026 F7FF FFFE       bl               checkcom
+   68 0000002A 2800            cmp              R0, #0x00
+   69 0000002C D1FF            bne              input       ;branch away when c
+                                                            heckcom has nonzero
+                                                            .
+   70 0000002E         
+   71 0000002E F7FF FFFE 
+                       input   bl               getchar
+   72 00000032         
+   73 00000032 281B            cmp              R0, #esc_char
+   74 00000034 D006            beq              done
+   75 00000036 E7F1            b                loop
+   76 00000038         ;XXX D5-2 ----------------------------------------------
+                       ------------   
+   77 00000038 F7FF FFFE 
+                       output  bl               shownum
+   78 0000003C         
+   79 0000003C         ;ldrh R0,=0x0 ; not allowed because = only works for ldr
+                       
+   80 0000003C F04F 0000       ldr              R0,=0x0     ;zero out outclicks
+                                                            
+   81 00000040 8018            strh             R0, [R3]
+   82 00000042 E7EB            b                loop
+   83 00000044         ;-------------------------------------------------------
+                       --------
+   84 00000044 E7FE    done    b                done
+   85 00000046         
+   86 00000046                 ENDP
+   87 00000046         ;;
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   88 00000046         ;; Desired behavior: increment the clicks whenever the w
+                       aveform is changing sine
+   89 00000046         ;;
+   90 00000046         EXTI1_IRQHandler
+                               PROC
+   91 00000046 B500            push             {LR}
+   92 00000048         
+   93 00000048 480C            ldr              R0, =clicks
+   94 0000004A 6801            ldr              R1, [R0]
+   95 0000004C F101 0101       add              R1, #1
+   96 00000050 6001            str              R1, [R0]
+   97 00000052         
+   98 00000052 480C            ldr              R0, =EXTI_PR
+   99 00000054 F04F 0102       mov              R1, #EXTI1_PReset
+  100 00000058 6001            str              R1, [R0]
+  101 0000005A         ; Instructions
+  102 0000005A F85D EB04       pop              {LR}
+  103 0000005E 4770            bx               lr
+  104 00000060                 ENDP
+  105 00000060         
+  106 00000060         ;; I: clicks and outlicks
+  107 00000060         ;; O: *outclicks = *clicks, *clicks => 0
+  108 00000060         ;; 
+  109 00000060         SysTick_Handler
+                               PROC                         ;Future question to
+                                                             address: search mi
+                                                            crovision docs to f
+                                                            ind where the whole
+                                                             table is located
+  110 00000060 B500            push             {lr}
+  111 00000062 E92D 07FF       push             {r0-r10}
+  112 00000066         ;r3 is the setter variable, others are used for storing 
+                       addresses
+  113 00000066 4805            ldr              r0, =clicks
+  114 00000068 4905            ldr              r1, =outclicks
+  115 0000006A 8803            ldrh             r3, [r0]    ; 2 byte load is ne
+                                                            eded, now r3 has th
+                                                            e value of clicks  
+                                                                           
+  116 0000006C 800B            strh             r3, [r1]    ; copy clicks to ou
+                                                            tlicks, but make su
+                                                            re to send only 16 
+                                                            bits since it is 
+  117 0000006E F04F 0300       ldr              r3, =0x0    ; clear the setter 
+                                                            variable
+  118 00000072 6003            str              r3, [r0]    ; reset clicks to z
+                                                            ero
+  119 00000074         
+  120 00000074         
+  121 00000074         
+  122 00000074 E8BD 07FF       pop              {r0-r10}
+  123 00000078 F85D EB04       pop              {lr}
+  124 0000007C                 ENDP
+  125 0000007C                 END
+              00000000 
+              00000000 
+              40010414 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --depend=.\la
+b4main.d -o.\lab4main.o -I.\RTE\_AsmTemplate -IC:\Users\etben\AppData\Local\Arm
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include -IC:\Users\etben\AppData\Local\Arm\Pa
+cks\Keil\STM32F1xx_DFP\2.4.1\Device\Include --predefine="__EVAL SETA 1" --prede
+fine="__UVISION_VERSION SETA 528" --predefine="_RTE_ SETA 1" --predefine="STM32
+F10X_MD SETA 1" --list=.\lab4main.lst lab4main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+MyConst 00000000
+
+Symbol: MyConst
+   Definitions
+      At line 6 in file lab4main.s
+   Uses
+      None
+Comment: MyConst unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+MyData 00000000
+
+Symbol: MyData
+   Definitions
+      At line 10 in file lab4main.s
+   Uses
+      None
+Comment: MyData unused
+clicks 00000000
+
+Symbol: clicks
+   Definitions
+      At line 12 in file lab4main.s
+   Uses
+      At line 31 in file lab4main.s
+      At line 93 in file lab4main.s
+      At line 113 in file lab4main.s
+
+outclicks 00000002
+
+Symbol: outclicks
+   Definitions
+      At line 13 in file lab4main.s
+   Uses
+      At line 35 in file lab4main.s
+      At line 61 in file lab4main.s
+      At line 114 in file lab4main.s
+
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ARMex 00000000
+
+Symbol: ARMex
+   Definitions
+      At line 15 in file lab4main.s
+   Uses
+      None
+Comment: ARMex unused
+EXTI1_IRQHandler 00000046
+
+Symbol: EXTI1_IRQHandler
+   Definitions
+      At line 90 in file lab4main.s
+   Uses
+      None
+Comment: EXTI1_IRQHandler unused
+SysTick_Handler 00000060
+
+Symbol: SysTick_Handler
+   Definitions
+      At line 109 in file lab4main.s
+   Uses
+      None
+Comment: SysTick_Handler unused
+__main 00000000
+
+Symbol: __main
+   Definitions
+      At line 17 in file lab4main.s
+   Uses
+      At line 18 in file lab4main.s
+Comment: __main used once
+done 00000044
+
+Symbol: done
+   Definitions
+      At line 84 in file lab4main.s
+   Uses
+      At line 74 in file lab4main.s
+      At line 84 in file lab4main.s
+
+input 0000002E
+
+Symbol: input
+   Definitions
+      At line 71 in file lab4main.s
+   Uses
+      At line 69 in file lab4main.s
+Comment: input used once
+loop 0000001C
+
+Symbol: loop
+   Definitions
+      At line 59 in file lab4main.s
+   Uses
+      At line 75 in file lab4main.s
+      At line 82 in file lab4main.s
+
+output 00000038
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: output
+   Definitions
+      At line 77 in file lab4main.s
+   Uses
+      At line 64 in file lab4main.s
+Comment: output used once
+8 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+EXTI1_PReset 00000002
+
+Symbol: EXTI1_PReset
+   Definitions
+      At line 3 in file lab4main.s
+   Uses
+      At line 99 in file lab4main.s
+Comment: EXTI1_PReset used once
+EXTI_PR 40010414
+
+Symbol: EXTI_PR
+   Definitions
+      At line 2 in file lab4main.s
+   Uses
+      At line 98 in file lab4main.s
+Comment: EXTI_PR used once
+esc_char 0000001B
+
+Symbol: esc_char
+   Definitions
+      At line 4 in file lab4main.s
+   Uses
+      At line 73 in file lab4main.s
+Comment: esc_char used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+checkcom 00000000
+
+Symbol: checkcom
+   Definitions
+      At line 22 in file lab4main.s
+   Uses
+      At line 67 in file lab4main.s
+Comment: checkcom used once
+getchar 00000000
+
+Symbol: getchar
+   Definitions
+      At line 23 in file lab4main.s
+   Uses
+      At line 71 in file lab4main.s
+Comment: getchar used once
+initcom 00000000
+
+Symbol: initcom
+   Definitions
+      At line 21 in file lab4main.s
+   Uses
+      At line 49 in file lab4main.s
+Comment: initcom used once
+initint 00000000
+
+Symbol: initint
+   Definitions
+      At line 19 in file lab4main.s
+   Uses
+      At line 42 in file lab4main.s
+Comment: initint used once
+inittime 00000000
+
+Symbol: inittime
+   Definitions
+      At line 25 in file lab4main.s
+   Uses
+      At line 45 in file lab4main.s
+Comment: inittime used once
+serialIO 00000000
+
+Symbol: serialIO
+   Definitions
+      At line 20 in file lab4main.s
+   Uses
+      None
+Comment: serialIO unused
+shownum 00000000
+
+Symbol: shownum
+   Definitions
+      At line 24 in file lab4main.s
+   Uses
+      At line 77 in file lab4main.s
+Comment: shownum used once
+7 symbols
+358 symbols in table
