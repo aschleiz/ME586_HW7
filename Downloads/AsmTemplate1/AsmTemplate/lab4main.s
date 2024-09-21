@@ -16,6 +16,7 @@ outclicks   SPACE 2
 			ENTRY
 __main      PROC
 			EXPORT  __main
+
 			IMPORT initint
 			IMPORT serialIO
 			IMPORT initcom
@@ -44,7 +45,7 @@ __main      PROC
                   ;D3 --------------------------------
 			bl inittime ; Set up timer
 			;mov R1, #0
-
+            ;b done ;test code
                   ;D4 --------------------------------
             bl initcom
 
@@ -88,7 +89,8 @@ done    	b done
 ;; Desired behavior: increment the clicks whenever the waveform is changing sine
 ;;
 EXTI1_IRQHandler PROC
-	            push {LR}
+	        EXPORT EXTI1_IRQHandler
+			push {LR}
 			
 			ldr R0, =clicks 
 			ldr R1, [R0]
@@ -107,7 +109,9 @@ EXTI1_IRQHandler PROC
 ;; O: *outclicks = *clicks, *clicks => 0
 ;; 
 SysTick_Handler PROC ;Future question to address: search microvision docs to find where the whole table is located
-                 push {lr}
+                 EXPORT SysTick_Handler ;need this because otherwise the code will get stuck and call the wrong version of the handler (the weak one)
+                                        ;this implies that we leave main once an exception is called
+				 push {lr}
                  push {r0-r10}
                                     ;r3 is the setter variable, others are used for storing addresses
                  ldr r0, =clicks
@@ -120,7 +124,8 @@ SysTick_Handler PROC ;Future question to address: search microvision docs to fin
 
 
                  pop  {r0-r10}
-                 pop  {lr}	
+                 pop  {lr}
+				 bx lr
 			ENDP
 			END
 		    

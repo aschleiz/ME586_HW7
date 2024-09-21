@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\OutputAsm.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\OutputAsm.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6120001: Last Updated: Sat Sep 21 08:26:32 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6120001: Last Updated: Sat Sep 21 17:20:08 2024
 <BR><P>
 <H3>Maximum Stack Usage =          8 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -26,7 +26,6 @@ Mutually Recursive functions
  <LI><a href="#[6]">SVC_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[6]">SVC_Handler</a><BR>
  <LI><a href="#[7]">DebugMon_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[7]">DebugMon_Handler</a><BR>
  <LI><a href="#[8]">PendSV_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[8]">PendSV_Handler</a><BR>
- <LI><a href="#[9]">SysTick_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[9]">SysTick_Handler</a><BR>
  <LI><a href="#[1c]">ADC1_IRQHandler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[1c]">ADC1_IRQHandler</a><BR>
 </UL>
 <P>
@@ -46,7 +45,7 @@ Function Pointers
  <LI><a href="#[7]">DebugMon_Handler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[10]">EXTI0_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[2e]">EXTI15_10_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
- <LI><a href="#[11]">EXTI1_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
+ <LI><a href="#[11]">EXTI1_IRQHandler</a> from lab4main.o(ARMex) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[12]">EXTI2_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[13]">EXTI3_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[14]">EXTI4_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
@@ -68,7 +67,7 @@ Function Pointers
  <LI><a href="#[29]">SPI1_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[2a]">SPI2_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[6]">SVC_Handler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
- <LI><a href="#[9]">SysTick_Handler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
+ <LI><a href="#[9]">SysTick_Handler</a> from lab4main.o(ARMex) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[33]">SystemInit</a> from system_stm32f10x.o(.text) referenced from startup_stm32f10x_md_vl.o(.text)
  <LI><a href="#[c]">TAMPER_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
  <LI><a href="#[1e]">TIM1_BRK_TIM15_IRQHandler</a> from startup_stm32f10x_md_vl.o(.text) referenced from startup_stm32f10x_md_vl.o(RESET)
@@ -157,13 +156,6 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(RESET)
 </UL>
-<P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, startup_stm32f10x_md_vl.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
-</UL>
-<BR>[Called By]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
-</UL>
-<BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(RESET)
-</UL>
 <P><STRONG><a name="[1c]"></a>ADC1_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32f10x_md_vl.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC1_IRQHandler
 </UL>
@@ -199,9 +191,6 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(RESET)
 </UL>
 <P><STRONG><a name="[2e]"></a>EXTI15_10_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32f10x_md_vl.o(.text))
-<BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(RESET)
-</UL>
-<P><STRONG><a name="[11]"></a>EXTI1_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32f10x_md_vl.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(RESET)
 </UL>
 <P><STRONG><a name="[12]"></a>EXTI2_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32f10x_md_vl.o(.text))
@@ -299,7 +288,7 @@ Global Symbols
 
 <P><STRONG><a name="[43]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[34]"></a>__main</STRONG> (Thumb, 70 bytes, Stack size 0 bytes, lab4main.o(ARMex))
+<P><STRONG><a name="[34]"></a>__main</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, lab4main.o(ARMex))
 <BR><BR>[Calls]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shownum
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;inittime
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initint
@@ -308,6 +297,12 @@ Global Symbols
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkcom
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(.text)
+</UL>
+<P><STRONG><a name="[11]"></a>EXTI1_IRQHandler</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, lab4main.o(ARMex))
+<BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(RESET)
+</UL>
+<P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, lab4main.o(ARMex))
+<BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md_vl.o(RESET)
 </UL>
 <P><STRONG><a name="[3c]"></a>serialIO</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, serialio.o(ARMex), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testChComp

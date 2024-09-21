@@ -95,11 +95,14 @@ ARM Macro Assembler    Page 2
    58 00000024         
    59 00000024 E8BD 07FF       pop              {r0-r10}
    60 00000028 F85D EB04       pop              {lr}
-   61 0000002C         
-   62 0000002C E7FE    done    b                done
-   63 0000002E         
-   64 0000002E                 ENDP
-   65 0000002E                 END
+   61 0000002C 4770            bx               lr
+   62 0000002E         ;; Test report: initial: ST_RELOAD -> 0x000493DF, Enable
+                       d clock, and tick int is set! Else zero in STK_CTRL
+   63 0000002E         ;;
+   64 0000002E         
+   65 0000002E         
+   66 0000002E                 ENDP
+   67 0000002E                 END
               00 00 000493DF 
               E000E014 
               E000E010 
@@ -153,14 +156,6 @@ Symbol: ARMex
    Uses
       None
 Comment: ARMex unused
-done 0000002C
-
-Symbol: done
-   Definitions
-      At line 62 in file inittime.s
-   Uses
-      At line 62 in file inittime.s
-Comment: done used once
 inittime 00000000
 
 Symbol: inittime
@@ -169,7 +164,7 @@ Symbol: inittime
    Uses
       At line 33 in file inittime.s
 Comment: inittime used once
-3 symbols
+2 symbols
 
 
 
@@ -209,4 +204,4 @@ Symbol: STK_RVR
       At line 43 in file inittime.s
 Comment: STK_RVR used once
 4 symbols
-345 symbols in table
+344 symbols in table

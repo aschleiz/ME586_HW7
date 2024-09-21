@@ -12,6 +12,7 @@ Section Cross References
     startup_stm32f10x_md_vl.o(RESET) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
     startup_stm32f10x_md_vl.o(RESET) refers to startup_stm32f10x_md_vl.o(STACK) for __initial_sp
     startup_stm32f10x_md_vl.o(RESET) refers to startup_stm32f10x_md_vl.o(.text) for Reset_Handler
+    startup_stm32f10x_md_vl.o(RESET) refers to lab4main.o(ARMex) for SysTick_Handler
     startup_stm32f10x_md_vl.o(.text) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
     startup_stm32f10x_md_vl.o(.text) refers to system_stm32f10x.o(.text) for SystemInit
     startup_stm32f10x_md_vl.o(.text) refers to lab4main.o(ARMex) for __main
@@ -70,12 +71,12 @@ Image Symbol Table
     __arm_cp.1_4                             0x08000260   Number         4  system_stm32f10x.o(.text)
     .text                                    0x08000264   Section       64  startup_stm32f10x_md_vl.o(.text)
     .text                                    0x080002a4   Section        0  heapauxi.o(.text)
-    ARMex                                    0x080002ac   Section      136  lab4main.o(ARMex)
-    ARMex                                    0x08000334   Section      472  serialio.o(ARMex)
-    ARMex                                    0x0800050c   Section       76  initint.o(ARMex)
-    ARMex                                    0x08000558   Section       60  inittime.o(ARMex)
-    ASCII                                    0x080005a4   Data           1  serialio.o(DATAINIT)
-    DATAINIT                                 0x080005a4   Section        1  serialio.o(DATAINIT)
+    ARMex                                    0x080002ac   Section      140  lab4main.o(ARMex)
+    ARMex                                    0x08000338   Section      472  serialio.o(ARMex)
+    ARMex                                    0x08000510   Section       76  initint.o(ARMex)
+    ARMex                                    0x0800055c   Section       60  inittime.o(ARMex)
+    ASCII                                    0x080005a8   Data           1  serialio.o(DATAINIT)
+    DATAINIT                                 0x080005a8   Section        1  serialio.o(DATAINIT)
     clicks                                   0x20000004   Data           2  lab4main.o(MyData)
     MyData                                   0x20000004   Section        4  lab4main.o(MyData)
     outclicks                                0x20000006   Data           2  lab4main.o(MyData)
@@ -106,7 +107,6 @@ Image Symbol Table
     SVC_Handler                              0x08000277   Thumb Code     2  startup_stm32f10x_md_vl.o(.text)
     DebugMon_Handler                         0x08000279   Thumb Code     2  startup_stm32f10x_md_vl.o(.text)
     PendSV_Handler                           0x0800027b   Thumb Code     2  startup_stm32f10x_md_vl.o(.text)
-    SysTick_Handler                          0x0800027d   Thumb Code     2  startup_stm32f10x_md_vl.o(.text)
     ADC1_IRQHandler                          0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
     CEC_IRQHandler                           0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
     DMA1_Channel1_IRQHandler                 0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
@@ -118,7 +118,6 @@ Image Symbol Table
     DMA1_Channel7_IRQHandler                 0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
     EXTI0_IRQHandler                         0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
     EXTI15_10_IRQHandler                     0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
-    EXTI1_IRQHandler                         0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
     EXTI2_IRQHandler                         0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
     EXTI3_IRQHandler                         0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
     EXTI4_IRQHandler                         0x0800027f   Thumb Code     0  startup_stm32f10x_md_vl.o(.text)
@@ -152,18 +151,20 @@ Image Symbol Table
     __use_two_region_memory                  0x080002a5   Thumb Code     2  heapauxi.o(.text)
     __rt_heap_escrow$2region                 0x080002a7   Thumb Code     2  heapauxi.o(.text)
     __rt_heap_expand$2region                 0x080002a9   Thumb Code     2  heapauxi.o(.text)
-    __main                                   0x080002ad   Thumb Code    70  lab4main.o(ARMex)
-    serialIO                                 0x08000335   Thumb Code    34  serialio.o(ARMex)
-    initcom                                  0x08000357   Thumb Code    70  serialio.o(ARMex)
-    checkcom                                 0x0800039d   Thumb Code    38  serialio.o(ARMex)
-    getchar                                  0x080003c3   Thumb Code    20  serialio.o(ARMex)
-    showchar                                 0x080003d7   Thumb Code    30  serialio.o(ARMex)
-    testChComp                               0x080003f5   Thumb Code    14  serialio.o(ARMex)
-    bindec                                   0x08000403   Thumb Code   108  serialio.o(ARMex)
-    shownum                                  0x0800046f   Thumb Code   124  serialio.o(ARMex)
-    initint                                  0x0800050d   Thumb Code    54  initint.o(ARMex)
-    inittime                                 0x08000559   Thumb Code    46  inittime.o(ARMex)
-    AHBPrescTable                            0x08000594   Data          16  system_stm32f10x.o(.rodata.AHBPrescTable)
+    __main                                   0x080002ad   Thumb Code    72  lab4main.o(ARMex)
+    EXTI1_IRQHandler                         0x080002f5   Thumb Code    26  lab4main.o(ARMex)
+    SysTick_Handler                          0x0800030f   Thumb Code    30  lab4main.o(ARMex)
+    serialIO                                 0x08000339   Thumb Code    34  serialio.o(ARMex)
+    initcom                                  0x0800035b   Thumb Code    70  serialio.o(ARMex)
+    checkcom                                 0x080003a1   Thumb Code    38  serialio.o(ARMex)
+    getchar                                  0x080003c7   Thumb Code    20  serialio.o(ARMex)
+    showchar                                 0x080003db   Thumb Code    30  serialio.o(ARMex)
+    testChComp                               0x080003f9   Thumb Code    14  serialio.o(ARMex)
+    bindec                                   0x08000407   Thumb Code   108  serialio.o(ARMex)
+    shownum                                  0x08000473   Thumb Code   124  serialio.o(ARMex)
+    initint                                  0x08000511   Thumb Code    54  initint.o(ARMex)
+    inittime                                 0x0800055d   Thumb Code    46  inittime.o(ARMex)
+    AHBPrescTable                            0x08000598   Data          16  system_stm32f10x.o(.rodata.AHBPrescTable)
     SystemCoreClock                          0x20000000   Data           4  system_stm32f10x.o(.data.SystemCoreClock)
 
 
@@ -174,9 +175,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000265
 
-  Load Region LR_1 (Base: 0x08000000, Size: 0x000005c0, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x08000000, Size: 0x000005c4, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000005a8, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000005ac, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -185,24 +186,24 @@ Memory Map of the image
     0x08000264   0x08000264   0x00000040   Code   RO           15  * .text               startup_stm32f10x_md_vl.o
     0x080002a4   0x080002a4   0x00000006   Code   RO           47    .text               c_w.l(heapauxi.o)
     0x080002aa   0x080002aa   0x00000002   PAD
-    0x080002ac   0x080002ac   0x00000088   Code   RO           23  * ARMex               lab4main.o
-    0x08000334   0x08000334   0x000001d8   Code   RO           29    ARMex               serialio.o
-    0x0800050c   0x0800050c   0x0000004c   Code   RO           35  * ARMex               initint.o
-    0x08000558   0x08000558   0x0000003c   Code   RO           41  * ARMex               inittime.o
-    0x08000594   0x08000594   0x00000010   Data   RO            4    .rodata.AHBPrescTable  system_stm32f10x.o
-    0x080005a4   0x080005a4   0x00000001   Data   RO           28    DATAINIT            serialio.o
+    0x080002ac   0x080002ac   0x0000008c   Code   RO           23  * ARMex               lab4main.o
+    0x08000338   0x08000338   0x000001d8   Code   RO           29    ARMex               serialio.o
+    0x08000510   0x08000510   0x0000004c   Code   RO           35  * ARMex               initint.o
+    0x0800055c   0x0800055c   0x0000003c   Code   RO           41  * ARMex               inittime.o
+    0x08000598   0x08000598   0x00000010   Data   RO            4    .rodata.AHBPrescTable  system_stm32f10x.o
+    0x080005a8   0x080005a8   0x00000001   Data   RO           28    DATAINIT            serialio.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x080005a8, Size: 0x00000018, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x080005ac, Size: 0x00000018, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x080005a8   0x00000004   Data   RW            3    .data.SystemCoreClock  system_stm32f10x.o
-    0x20000004   0x080005ac   0x00000004   Data   RW           22    MyData              lab4main.o
-    0x20000008   0x080005b0   0x0000000f   Data   RW           27    Mydata              serialio.o
+    0x20000000   0x080005ac   0x00000004   Data   RW            3    .data.SystemCoreClock  system_stm32f10x.o
+    0x20000004   0x080005b0   0x00000004   Data   RW           22    MyData              lab4main.o
+    0x20000008   0x080005b4   0x0000000f   Data   RW           27    Mydata              serialio.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000018, Load base: 0x080005c0, Size: 0x00000600, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000018, Load base: 0x080005c4, Size: 0x00000600, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -217,15 +218,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-        76         22          0          0          0        376   initint.o
-        60         14          0          0          0        376   inittime.o
-       136         12          0          4          0        492   lab4main.o
-       472         34          1         15          0        752   serialio.o
-        64         26        288          0       1536       1084   startup_stm32f10x_md_vl.o
-       324         40         16          4          0       2814   system_stm32f10x.o
+        76         22          0          0          0        404   initint.o
+        60         14          0          0          0        400   inittime.o
+       140         12          0          4          0        516   lab4main.o
+       472         34          1         15          0        780   serialio.o
+        64         26        288          0       1536       1108   startup_stm32f10x_md_vl.o
+       324         40         16          4          0       2840   system_stm32f10x.o
 
     ----------------------------------------------------------------------
-      1132        148        308         24       1536       5894   Object Totals
+      1136        148        308         24       1536       6048   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          3          1          0          0   (incl. Padding)
 
@@ -255,15 +256,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      1140        148        308         24       1536       5838   Grand Totals
-      1140        148        308         24       1536       5838   ELF Image Totals
-      1140        148        308         24          0          0   ROM Totals
+      1144        148        308         24       1536       5992   Grand Totals
+      1144        148        308         24       1536       5992   ELF Image Totals
+      1144        148        308         24          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 1448 (   1.41kB)
+    Total RO  Size (Code + RO Data)                 1452 (   1.42kB)
     Total RW  Size (RW Data + ZI Data)              1560 (   1.52kB)
-    Total ROM Size (Code + RO Data + RW Data)       1472 (   1.44kB)
+    Total ROM Size (Code + RO Data + RW Data)       1476 (   1.44kB)
 
 ==============================================================================
 

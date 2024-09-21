@@ -58,10 +58,10 @@ inittime	PROC
 
                   pop  {r0-r10}
                   pop {lr}
+				  bx lr
 				  ;; Test report: initial: ST_RELOAD -> 0x000493DF, Enabled clock, and tick int is set! Else zero in STK_CTRL
 ;;
 
-done    	b done
 		
 			ENDP
 			END
