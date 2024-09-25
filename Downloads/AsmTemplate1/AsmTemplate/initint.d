@@ -1,1 +1,0 @@
-.\initint.o: initint.s

@@ -1,1 +1,0 @@
-.\inittime.o: inittime.s

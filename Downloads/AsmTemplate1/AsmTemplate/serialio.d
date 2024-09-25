@@ -1,1 +1,0 @@
-.\serialio.o: serialIO.s
