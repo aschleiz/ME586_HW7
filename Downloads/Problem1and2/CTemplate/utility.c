@@ -62,7 +62,7 @@ short getanum(){
       PowTen = PowTen * 10;
       LoopCount = LoopCount + 1;
    }
-   while (LoopCount < 5))
+   while (LoopCount < 5);
 
 
    return OutputNumber;
@@ -75,3 +75,4 @@ short getanum(){
 
 
 /***********************END OF FILE****/
+

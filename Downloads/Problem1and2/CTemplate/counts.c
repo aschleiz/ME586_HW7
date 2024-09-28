@@ -1,11 +1,10 @@
-#include "utility.c"
-extern void showmsg(char *);
+#include "utility.h"
 extern void keycount();
 extern void initcom();
 
 int main(void)
 {
-   char * IntroMsg[] = "counter program running: input s,d, or esc from keyboard to increment, decrement, or escape the counter program \0";
+   char IntroMsg[] = "counter program running: input s,d, or esc from keyboard to increment, decrement, or escape the counter program \0";
    initcom();
    showmsg(IntroMsg);
    
@@ -15,5 +14,9 @@ int main(void)
    
 while(1){};
 }
+void timehand(void){
+}
 
+void inthand(void){
+}
 
