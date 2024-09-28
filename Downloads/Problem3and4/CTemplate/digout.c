@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    counts.c 
+  * @file    digout.c 
   * @author  Emmit Benitez, Alex Schleizer
   * @version V1.1.0
   * @date    10-Oct-2018
@@ -9,7 +9,8 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
-//#include "ME586.h"
+#include "ME586.h"
+#include "utility.c"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -21,7 +22,12 @@
 
 int main(void)
 {
-		while(1){};
+    //1. verify that we don't need MELib.h in this directory
+    initcom();
+	while(1){
+       //showmsg(RequestMsg);
+	   //call getanum
+	};
 } //end of main program
 
 
