@@ -478,11 +478,6 @@
               <FilePath>.\counts.c</FilePath>
             </File>
             <File>
-              <FileName>digout.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\digout.c</FilePath>
-            </File>
-            <File>
               <FileName>utility.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\utility.c</FilePath>

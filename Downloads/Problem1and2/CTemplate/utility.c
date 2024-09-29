@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    utility.c 
-  * @author  Alex Schleizer
+  * @author  Emmit Benitez, Alex Schleizer
   * @version V1.1.0
   * @date    26-Sep-2024
   * @brief   Collection of utility functions.

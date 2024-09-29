@@ -4,7 +4,11 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
+/*
+Homework spec says to include ME586 lib for problem 4, however this requires us to
+make some small changes to utility.c
+*/
+#include <ME586.h>
 
 /*
 Proposed Tests:
@@ -18,8 +22,21 @@ Proposed Tests:
 
 */
 
-extern char checkcom();
-extern char getchar();
+//extern char checkcom();
+//extern char getchar();
+//extern void putchar();  // Same as showchar, but included in 586 lib
+
+void showmsg(char * msg){
+	// Local Variable Declarations
+	//char size = sizeof(msg);
+	int count = 0;
+	
+	// Loop through each character in msg and output to console using showchar
+	while(msg[count] != 0x00){
+		putchar(msg[count]);
+		count++;
+	}
+}
 
 short getanum(){
    
@@ -49,12 +66,11 @@ short getanum(){
       PowTen = PowTen * 10;
       LoopCount = LoopCount + 1;
    }
-   while (LoopCount < 5))
-   /*
+   while (LoopCount < 5);
+    
 
    return OutputNumber;
 
 
 }
-
 /***********************END OF FILE****/
