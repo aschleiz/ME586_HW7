@@ -20,6 +20,8 @@ extern void showmsg(char);
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 char RequestMsg[]= "Please enter an unsigned 16 bit number\n";
+unsigned short value;
+unsigned short tempnum;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -30,10 +32,10 @@ int main(void)
     initcom();
 	  while(1){
        showmsg(*RequestMsg);
-	     short value = getanum();
+	     value = getanum();
 			 //char tempnum = value; // Type conversion assigns the value of tempnum to be the low byte of value
 			 // digout((short)tempnum);
-			 short tempnum = (value & 0x000F); //Alternate method of isolating lowest byte
+			 tempnum = (value & 0xFF); //Alternate method of isolating lowest byte
 			 digout(tempnum);
 	};
 } //end of main program

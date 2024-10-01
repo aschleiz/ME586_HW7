@@ -9,7 +9,7 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
-
+//#include <ME586.h>
 extern void showchar(char);
 extern void initcom(void);
 extern void shownum(short);
@@ -75,4 +75,3 @@ short getanum(){
 
 
 /***********************END OF FILE****/
-
