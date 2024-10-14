@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
   * @file    main.c 
-  * @author  Zhou Zeng
+  * @author  Alex Schleizer
   * @version V1.1.0
-  * @date    10-Oct-2018
-  * @brief   Main program body.
+  * @date    10-14-2024
+  * @brief   Homework 6 Problem 1 Code File.
   ******************************************************************************
   */ 
 
