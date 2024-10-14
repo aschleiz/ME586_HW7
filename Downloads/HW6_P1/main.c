@@ -63,7 +63,7 @@ int readloop(void){
 		}
 		else{
 			if(count != 0){
-				shownum(count);
+				shownum(count); //TC5: double check int to short
 				putchar('\n');
 				putchar('\r');
 			break;
